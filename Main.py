@@ -24,8 +24,8 @@ x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(X, Y
 # test = []
 # test.append(audio("genres/rock/rock.00007.wav"))
 
-model = load_model('music7/3/model_Adam.h5')
-#model.summary()
+model = load_model('model.h5')
+model.summary()
 
 min_max_scaler = preprocessing.MinMaxScaler()
 x_test = min_max_scaler.fit_transform(x_test)

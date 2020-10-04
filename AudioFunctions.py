@@ -1,5 +1,7 @@
 import librosa
 import numpy as np
+import pandas as pd
+import sklearn
 
 
 # This function extracts features from music file
@@ -36,4 +38,15 @@ def labeling(output):
     return genres
 
 
-
+# do rownego podzialu, tak zeby na kazdy gatunek przypadalo 80/20 utworow testowych/treningowcyh
+def divide(data):
+    for i in range(10):
+        arr = data.loc[(100*i):(100*i)+99]
+        XYtrain, XYtest= sklearn.model_selection.train_test_split(arr, test_size=0.2, random_state=4)
+        if i == 0:
+            train = pd.DataFrame(XYtrain)
+            test = pd.DataFrame(XYtest)
+        else:
+            test = pd.concat([test, XYtest])
+            train = pd.concat([train, XYtrain])
+    return test, train
