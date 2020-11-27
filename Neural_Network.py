@@ -15,6 +15,7 @@ import sklearn
 from sklearn import preprocessing
 from sklearn.metrics import confusion_matrix
 from AudioFunctions import labeling
+from sklearn.decomposition import PCA
 
 # Wczytanie danych z pliku music7
 data = pd.read_csv("Data/music7.data")
@@ -36,6 +37,15 @@ Y = le.fit_transform(Y)
 
 # Podzial na zbiory treningowe i testowe # 80% training and 20% testing data
 x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(X, Y, test_size=0.2, random_state=4)
+
+
+'''
+pca_model = PCA(n_components=25)
+pca_model.fit(x_train)
+x_train = pca_model.transform(x_train)
+x_test = pca_model.transform(x_test)
+'''
+
 
 ## Poczatek tworzenia sieci
 input_shape = 30
@@ -67,11 +77,10 @@ print(model.evaluate(x_test, y_test, batch_size=8))
 
 y_pred = model.predict(x_test)
 y_pred = labeling(y_pred)
+cm = confusion_matrix(y_test, le.fit_transform(y_pred))
 
-cm = confusion_matrix(labeling(y_test), y_pred)
-
-
-
+model.summary()
+print(cm)
 
 # zapisuje wytrenowany model
 #model.save("music7/2/model_RMSprop.h5")
